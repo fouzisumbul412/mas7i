@@ -1,3 +1,4 @@
+// src/pages/contact.tsx
 import React, { useState } from 'react';
 import { Phone, Mail, Globe, MapPin, MessageCircle, Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { AnimatedSection } from '../components/AnimatedSection';
@@ -7,13 +8,13 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Phone",
-    details: ["+91 6304685185"],
-    action: "tel:+916304685185"
+    details: ["+91 91218611925"],
+    action: "tel:+919121861192"
   },
   {
     icon: Mail,
     title: "Email",
-    details: ["hr@mas7i.com", "shehnazurn1@gmail.com"],
+    details: ["hr@mas7i.com", "shehnaaz.noor@gmail.com"],
     action: "mailto:hr@mas7i.com"
   },
   {
@@ -45,11 +46,32 @@ export default function Contact() {
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
-    setIsSubmitted(true);
+    setSubmitting(true);
+    setError(null);
+    try {
+      const fd = new FormData();
+      fd.append('name', formData.name);
+      fd.append('email', formData.email);
+      fd.append('phone', formData.phone);
+      fd.append('service', formData.service);
+      fd.append('message', formData.message);
+
+      const res = await fetch('/api/form1.php', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data?.error || 'Failed to send.');
+
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -73,7 +95,7 @@ export default function Contact() {
             <AnimatedSection animation="slide-up">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 Let's{' '}
-                <TypeWriter 
+                <TypeWriter
                   texts={['Connect', 'Collaborate', 'Create', 'Grow Together']}
                   className="text-primary-light"
                 />
@@ -82,7 +104,7 @@ export default function Contact() {
 
             <AnimatedSection animation="slide-up" delay={200}>
               <p className="text-lg md:text-xl text-neutral-200 max-w-3xl mx-auto leading-relaxed mb-8">
-                Ready to transform your business? We'd love to hear about your goals and 
+                Ready to transform your business? We'd love to hear about your goals and
                 discuss how our solutions can help you achieve them.
               </p>
             </AnimatedSection>
@@ -108,7 +130,7 @@ export default function Contact() {
                   Get in Touch
                 </h2>
                 <p className="text-lg text-neutral-600 mb-8">
-                  We're here to help you succeed. Reach out to us through any of the channels below, 
+                  We're here to help you succeed. Reach out to us through any of the channels below,
                   and let's start building something amazing together.
                 </p>
               </AnimatedSection>
@@ -125,8 +147,8 @@ export default function Contact() {
                         {info.details.map((detail, idx) => (
                           <p key={idx} className="text-neutral-600 mb-1">
                             {info.action ? (
-                              <a 
-                                href={info.action} 
+                              <a
+                                href={info.action}
                                 className="hover:text-primary transition-[var(--transition-fast)]"
                                 target={info.action.startsWith('http') ? '_blank' : undefined}
                                 rel={info.action.startsWith('http') ? 'noopener noreferrer' : undefined}
@@ -166,14 +188,14 @@ export default function Contact() {
               <AnimatedSection animation="slide-right" delay={500}>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <a
-                    href="tel:+916304685185"
+                    href="tel:+919121861192"
                     className="btn-primary flex-1 justify-center"
                   >
                     <Phone className="h-4 w-4" />
                     Call Now
                   </a>
                   <a
-                    href="https://wa.me/916304685185?text=Hi%20MAS7i%2C%20I%27d%20like%20to%20discuss%20my%20business%20needs"
+                    href="https://wa.me/919121861192?text=Hi%20MAS7i%2C%20I%27d%20like%20to%20discuss%20my%20business%20needs"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-secondary bg-green-500 text-white border-green-500 hover:bg-green-600 flex-1 justify-center"
@@ -189,7 +211,7 @@ export default function Contact() {
             <AnimatedSection animation="slide-left" delay={200}>
               <div className="card-elevated p-8">
                 <h3 className="text-2xl font-bold text-neutral-900 mb-6">Send us a Message</h3>
-                
+
                 {!isSubmitted ? (
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -278,11 +300,14 @@ export default function Contact() {
                       />
                     </div>
 
+                    {error && <p className="text-red-600 text-sm">{error}</p>}
+
                     <button
                       type="submit"
-                      className="btn-primary w-full text-lg py-4"
+                      disabled={submitting}
+                      className="btn-primary w-full text-lg py-4 disabled:opacity-60"
                     >
-                      Send Message
+                      {submitting ? 'Sending...' : 'Send Message'}
                       <ArrowRight className="h-5 w-5" />
                     </button>
                   </form>

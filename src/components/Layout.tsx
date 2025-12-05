@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Phone, ArrowRight } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
-
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -38,14 +37,21 @@ export function Layout({ children }: LayoutProps) {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
               <div className="relative">
-                <div className="h-10 w-10 rounded-full bg-gradient-primary flex items-center justify-center text-white font-black text-lg shadow-[var(--shadow-primary)] group-hover:shadow-[var(--shadow-glow)] transition-[var(--transition-smooth)]">
-                  M
-                </div>
+                {/* Desktop Logo */}
+                <img
+                  src="/images/mas7i.png"
+                  alt="MAS7i Logo"
+                  className="h-24 w-24 object-cover shadow-[var(--shadow-primary)] group-hover:shadow-[var(--shadow-glow)] transition-[var(--transition-smooth)] hidden md:block"
+                />
+                {/* Mobile Logo */}
+                <img
+                  src="/images/mas7i.png"
+                  alt="MAS7i Logo"
+                  className="h-24 w-24 object-cover shadow-[var(--shadow-primary)] group-hover:shadow-[var(--shadow-glow)] transition-[var(--transition-smooth)] md:hidden"
+                />
                 <div className="absolute -inset-1 rounded-full bg-gradient-primary opacity-0 group-hover:opacity-20 blur transition-[var(--transition-smooth)]" />
               </div>
-              <div className="text-xl font-bold text-neutral-800 group-hover:text-primary transition-[var(--transition-smooth)]">
-                MAS7i
-              </div>
+              
             </Link>
 
             {/* Desktop Navigation */}
@@ -95,11 +101,11 @@ export function Layout({ children }: LayoutProps) {
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-3">
               <a
-                href="tel:+916304685185"
+                href="tel:+919121861192"
                 className="btn-secondary"
               >
                 <Phone className="h-4 w-4" />
-                +91 6304685185
+                +91 9121861192
               </a>
               <Link to="/contact" className="btn-primary">
                 Get Quote
@@ -135,7 +141,7 @@ export function Layout({ children }: LayoutProps) {
                   </Link>
                 ))}
                 <div className="flex gap-2 px-3 pt-2">
-                  <a href="tel:+916304685185" className="btn-secondary flex-1 justify-center">
+                  <a href="tel:+919121861192" className="btn-secondary flex-1 justify-center">
                     <Phone className="h-4 w-4" />
                     Call
                   </a>
@@ -159,33 +165,32 @@ export function Layout({ children }: LayoutProps) {
             {/* Brand */}
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-10 w-10 rounded-full bg-gradient-primary flex items-center justify-center text-white font-black text-lg">
-                  M
-                </div>
-                <div className="text-xl font-bold text-white">MAS7i</div>
+                {/* Desktop Logo */}
+                <img
+                  src="/images/mas7i.png"
+                  alt="MAS7i Logo"
+                  className="h-24 w-24 rounded-full object-cover shadow-[var(--shadow-primary)] bg-white p-2 hidden md:block"
+                />
+                {/* Mobile Logo */}
+                <img
+                  src="/images/mas7i.png"
+                  alt="MAS7i Logo"
+                  className="h-24 w-24 rounded-full object-cover shadow-[var(--shadow-primary)] bg-white p-2 md:hidden"
+                />
               </div>
               <p className="text-neutral-400 mb-4">
                 Your trusted business partner for growth and success. We deliver integrated solutions that drive results.
               </p>
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs text-primary-light">
-                25+ years of industry experience
-              </div>
             </div>
 
             {/* Quick Links */}
             <div>
               <h4 className="text-white font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
-                {navigation.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      to={item.href}
-                      className="text-neutral-400 hover:text-white transition-[var(--transition-fast)]"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
+                <li><Link to="/" className="text-neutral-400 hover:text-white transition-[var(--transition-fast)]">Home</Link></li>
+                <li><Link to="/about" className="text-neutral-400 hover:text-white transition-[var(--transition-fast)]">About</Link></li>
+                <li><Link to="/services" className="text-neutral-400 hover:text-white transition-[var(--transition-fast)]">Services</Link></li>
+                <li><Link to="/contact" className="text-neutral-400 hover:text-white transition-[var(--transition-fast)]">Contact</Link></li>
               </ul>
             </div>
 
@@ -207,7 +212,7 @@ export function Layout({ children }: LayoutProps) {
               <div className="space-y-2 text-sm">
                 <p className="text-neutral-400">
                   <strong className="text-white">Phone:</strong><br />
-                  <a href="tel:+916304685185" className="hover:text-white transition-[var(--transition-fast)]">+91 6304685185</a>
+                  <a href="tel:+919121861192" className="hover:text-white transition-[var(--transition-fast)]">+91 9121861192</a>
                 </p>
                 <p className="text-neutral-400">
                   <strong className="text-white">Email:</strong><br />
@@ -239,7 +244,7 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/916304685185?text=Hi%20MAS7i%2C%20I%27m%20interested%20in%20your%20services"
+        href="https://wa.me/919121861192?text=Hi%20MAS7i%2C%20I%27m%20interested%20in%20your%20services"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-40 h-14 w-14 rounded-full bg-green-500 text-white shadow-xl hover:bg-green-600 hover:scale-110 transition-[var(--transition-bounce)] flex items-center justify-center group animate-pulse"

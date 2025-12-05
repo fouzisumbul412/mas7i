@@ -1,12 +1,11 @@
+// src/pages/home.tsx
 import React, { useState } from 'react';
 import { CheckCircle2, ArrowRight, Target, Layers, Globe2, Quote, Star, Users, Award, TrendingUp, Phone, Mail, MapPin, Send, Plus, Minus, ExternalLink } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { TypeWriter } from '../components/TypeWriter';
 import { AnimatedSection } from '../components/AnimatedSection';
-import { ServiceCard } from '../components/ServiceCard';
 
-// Import images
 import heroBusiness from '../assets/hero-business.jpg';
 import recruitmentService from '../assets/recruitment-service.jpg';
 import travelService from '../assets/travel-service.jpg';
@@ -58,8 +57,8 @@ const services = [
 ];
 
 const stats = [
-  { number: "25+", label: "Years Experience" },
-  { number: "1000+", label: "Projects Delivered" },
+  { number: "16+", label: "Years Experience" },
+  { number: "100+", label: "Projects Delivered" },
   { number: "95%", label: "Client Retention" },
   { number: "24/7", label: "Support Available" }
 ];
@@ -107,7 +106,7 @@ const faqData = [
   },
   {
     question: "How experienced is MAS7i?",
-    answer: "With over 25 years of industry experience, we have successfully delivered 1000+ projects with a 95% client retention rate."
+    answer: "With over 16 years of industry experience, we have successfully delivered 100+ projects with a 95% client retention rate."
   },
   {
     question: "Do you work with international clients?",
@@ -159,22 +158,65 @@ const popularSearches = [
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    service: '',
-    message: ''
+
+  // Form 2 (Hero Quote) state
+  const [formDataHero, setFormDataHero] = useState({
+    name: '', phone: '', email: '', service: '', message: ''
   });
+  const [heroSubmitting, setHeroSubmitting] = useState(false);
+  const [heroSubmitted, setHeroSubmitted] = useState(false);
+  const [heroError, setHeroError] = useState<string | null>(null);
+
+  // Form 3 (Bottom Message) state
+  const [formDataContact, setFormDataContact] = useState({
+    name: '', email: '', phone: '', message: ''
+  });
+  const [contactSubmitting, setContactSubmitting] = useState(false);
+  const [contactSubmitted, setContactSubmitted] = useState(false);
+  const [contactError, setContactError] = useState<string | null>(null);
 
   const handleFaqToggle = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  // Submit Hero "Free Quote" -> /api/form2.php
+  const handleHeroSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+    setHeroSubmitting(true);
+    setHeroError(null);
+    try {
+      const fd = new FormData();
+      Object.entries(formDataHero).forEach(([k, v]) => fd.append(k, v));
+      const res = await fetch('/api/form2.php', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data?.error || 'Failed to send.');
+      setHeroSubmitted(true);
+      setFormDataHero({ name: '', phone: '', email: '', service: '', message: '' });
+    } catch (err: any) {
+      setHeroError(err.message || 'Something went wrong.');
+    } finally {
+      setHeroSubmitting(false);
+    }
+  };
+
+  // Submit Bottom "Send us a Message" -> /api/form3.php
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setContactSubmitting(true);
+    setContactError(null);
+    try {
+      const fd = new FormData();
+      Object.entries(formDataContact).forEach(([k, v]) => fd.append(k, v));
+      const res = await fetch('/api/form3.php', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data?.error || 'Failed to send.');
+      setContactSubmitted(true);
+      setFormDataContact({ name: '', email: '', phone: '', message: '' });
+    } catch (err: any) {
+      setContactError(err.message || 'Something went wrong.');
+    } finally {
+      setContactSubmitting(false);
+    }
   };
 
   return (
@@ -198,7 +240,7 @@ export default function Home() {
               <AnimatedSection animation="slide-up">
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm px-4 py-2 text-sm font-medium">
                   <CheckCircle2 className="h-4 w-4 text-red-400" />
-                  <span>25+ years of industry excellence</span>
+                  <span>16+ years of industry excellence</span>
                 </div>
               </AnimatedSection>
 
@@ -233,74 +275,86 @@ export default function Home() {
               </AnimatedSection>
             </div>
 
-            {/* Contact Form */}
+            {/* Hero Quote Form (Form 2) */}
             <AnimatedSection animation="slide-left" delay={400} className="relative">
               <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20">
                 <h3 className="text-2xl font-bold text-white mb-6">Get Your Free Quote</h3>
-                <form className="space-y-4" onSubmit={handleFormSubmit}>
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Your Name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg bg-white/90 border border-white/20 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="tel"
-                      placeholder="Phone Number"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg bg-white/90 border border-white/20 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="email"
-                      placeholder="Email Address"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg bg-white/90 border border-white/20 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <select
-                      value={formData.service}
-                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg bg-white/90 border border-white/20 text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
-                      required
+
+                {!heroSubmitted ? (
+                  <form className="space-y-4" onSubmit={handleHeroSubmit}>
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Your Name"
+                        value={formDataHero.name}
+                        onChange={(e) => setFormDataHero({ ...formDataHero, name: e.target.value })}
+                        className="w-full px-4 py-3 rounded-lg bg-white/90 border border-white/20 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="tel"
+                        placeholder="Phone Number"
+                        value={formDataHero.phone}
+                        onChange={(e) => setFormDataHero({ ...formDataHero, phone: e.target.value })}
+                        className="w-full px-4 py-3 rounded-lg bg-white/90 border border-white/20 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="email"
+                        placeholder="Email Address"
+                        value={formDataHero.email}
+                        onChange={(e) => setFormDataHero({ ...formDataHero, email: e.target.value })}
+                        className="w-full px-4 py-3 rounded-lg bg-white/90 border border-white/20 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <select
+                        value={formDataHero.service}
+                        onChange={(e) => setFormDataHero({ ...formDataHero, service: e.target.value })}
+                        className="w-full px-4 py-3 rounded-lg bg-white/90 border border-white/20 text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                        required
+                      >
+                        <option value="">Select Service</option>
+                        <option value="recruitment">Recruitment & HR</option>
+                        <option value="travel">Air Ticketing</option>
+                        <option value="marketing">Digital Marketing</option>
+                        <option value="branding">Branding</option>
+                        <option value="web-development">Web Development</option>
+                      </select>
+                    </div>
+                    <div>
+                      <textarea
+                        placeholder="Tell us about your requirements..."
+                        rows={4}
+                        value={formDataHero.message}
+                        onChange={(e) => setFormDataHero({ ...formDataHero, message: e.target.value })}
+                        className="w-full px-4 py-3 rounded-lg bg-white/90 border border-white/20 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all resize-none"
+                        required
+                      />
+                    </div>
+
+                    {heroError && <p className="text-red-200 text-sm">{heroError}</p>}
+
+                    <button
+                      type="submit"
+                      disabled={heroSubmitting}
+                      className="w-full bg-gradient-to-r from-primary to-red-500 hover:from-red-700 hover:to-red-600 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl disabled:opacity-60"
                     >
-                      <option value="">Select Service</option>
-                      <option value="recruitment">Recruitment & HR</option>
-                      <option value="travel">Air Ticketing</option>
-                      <option value="marketing">Digital Marketing</option>
-                      <option value="branding">Branding</option>
-                      <option value="web-development">Web Development</option>
-                    </select>
+                      {heroSubmitting ? 'Sending...' : 'Get Free Quote'}
+                      <ArrowRight className="h-5 w-5 inline ml-2" />
+                    </button>
+                  </form>
+                ) : (
+                  <div className="text-white">
+                    <p className="font-semibold mb-2">Thanks! Your request was sent.</p>
+                    <p className="text-sm opacity-90">We’ll contact you shortly.</p>
                   </div>
-                  <div>
-                    <textarea
-                      placeholder="Tell us about your requirements..."
-                      rows={4}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg bg-white/90 border border-white/20 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all resize-none"
-                      required
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-primary to-red-500 hover:from-red-700 hover:to-red-600 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
-                  >
-                    Get Free Quote
-                    <ArrowRight className="h-5 w-5 inline ml-2" />
-                  </button>
-                </form>
+                )}
               </div>
             </AnimatedSection>
           </div>
@@ -317,7 +371,7 @@ export default function Home() {
                   About <span className="text-primary">MAS7i</span>
                 </h2>
                 <p className="text-lg text-neutral-600 leading-relaxed">
-                  With over 25 years of industry experience, MAS7i has been the trusted partner
+                  With over 16 years of industry experience, MAS7i has been the trusted partner
                   for businesses seeking growth and digital transformation. We combine innovation
                   with reliability to deliver results that matter.
                 </p>
@@ -350,7 +404,6 @@ export default function Home() {
       {/* Our Services */}
       <section className="py-20 bg-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Section Header */}
           <div className="text-center mb-16">
             <AnimatedSection animation="slide-up">
               <h2 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">
@@ -362,28 +415,21 @@ export default function Home() {
             </AnimatedSection>
           </div>
 
-          {/* Services Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => {
-              const Icon = service.icon; // turn component ref into a usable element
+              const Icon = service.icon;
               return (
                 <div
                   key={`${service.title}-${index}`}
                   className="relative overflow-hidden rounded-2xl group"
                 >
-                  {/* Background Image */}
                   <img
                     src={service.image}
                     alt={service.title}
                     className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-
-                  {/* 🔲 Black Overlay */}
                   <div className="absolute inset-0 bg-black/60" />
-
-                  {/* Foreground Content */}
                   <div className="absolute inset-0 z-10 p-5 flex flex-col justify-end">
-                    {/* Icon + Title */}
                     <div className="flex items-center gap-3 mb-2">
                       {Icon && (
                         <div className="grid place-items-center w-10 h-10 rounded-lg bg-white/20 backdrop-blur-md">
@@ -392,18 +438,12 @@ export default function Home() {
                       )}
                       <h3 className="text-white text-xl font-bold">{service.title}</h3>
                     </div>
-
-                    {/* Tagline (was 'subtitle') */}
                     {service.tagline && (
                       <p className="text-red-400 text-sm font-medium mb-1">
                         {service.tagline}
                       </p>
                     )}
-
-                    {/* Description */}
                     <p className="text-white/90 text-sm mb-4">{service.description}</p>
-
-                    {/* CTA */}
                     <Link
                       to={service.link}
                       className="text-white font-semibold inline-flex items-center gap-1"
@@ -417,7 +457,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
 
       {/* Stats Counter */}
       <section className="bg-primary py-16">
@@ -540,17 +579,16 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Marquee */}
           <div className="relative w-full overflow-hidden bg-primary rounded-2xl">
             <div className="py-4">
               <div className="flex animate-marquee whitespace-nowrap">
                 <span className="mx-8 text-white font-semibold">✦ 100+ New Clients Every Month</span>
-                <span className="mx-8 text-white font-semibold">✦ 25+ Years Experience</span>
+                <span className="mx-8 text-white font-semibold">✦ 16+ Years Experience</span>
                 <span className="mx-8 text-white font-semibold">✦ Online Consultation – All India</span>
                 <span className="mx-8 text-white font-semibold">✦ 24/7 Support</span>
                 <span className="mx-8 text-white font-semibold">✦ Fast Turnaround</span>
                 <span className="mx-8 text-white font-semibold">✦ 100+ New Clients Every Month</span>
-                <span className="mx-8 text-white font-semibold">✦ 25+ Years Experience</span>
+                <span className="mx-8 text-white font-semibold">✦ 16+ Years Experience</span>
                 <span className="mx-8 text-white font-semibold">✦ Online Consultation – All India</span>
                 <span className="mx-8 text-white font-semibold">✦ 24/7 Support</span>
                 <span className="mx-8 text-white font-semibold">✦ Fast Turnaround</span>
@@ -561,7 +599,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-neutral-50">
+      {/* <section className="py-20 bg-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <AnimatedSection animation="slide-up">
@@ -591,7 +629,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ */}
       <section className="py-20 bg-white">
@@ -634,11 +672,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Form Again */}
+      {/* Contact Again (Form 3) */}
       <section className="py-20 bg-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Info */}
             <AnimatedSection animation="slide-up">
               <div className="space-y-8">
                 <div>
@@ -657,7 +694,7 @@ export default function Home() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-neutral-800">Phone</h3>
-                      <p className="text-neutral-600">+91 6304685185</p>
+                      <p className="text-neutral-600">+91 9121861192</p>
                     </div>
                   </div>
 
@@ -687,58 +724,69 @@ export default function Home() {
               </div>
             </AnimatedSection>
 
-            {/* Contact Form */}
             <AnimatedSection animation="slide-up" delay={200}>
               <div className="card-elevated p-8">
                 <h3 className="text-xl font-bold text-neutral-800 mb-6">Send us a Message</h3>
-                <form onSubmit={handleFormSubmit} className="space-y-6">
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Your Name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors"
-                      required
-                    />
+
+                {!contactSubmitted ? (
+                  <form onSubmit={handleContactSubmit} className="space-y-6">
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Your Name"
+                        value={formDataContact.name}
+                        onChange={(e) => setFormDataContact({ ...formDataContact, name: e.target.value })}
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="email"
+                        placeholder="Your Email"
+                        value={formDataContact.email}
+                        onChange={(e) => setFormDataContact({ ...formDataContact, email: e.target.value })}
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="tel"
+                        placeholder="Your Phone"
+                        value={formDataContact.phone}
+                        onChange={(e) => setFormDataContact({ ...formDataContact, phone: e.target.value })}
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <textarea
+                        placeholder="Your Message"
+                        rows={5}
+                        value={formDataContact.message}
+                        onChange={(e) => setFormDataContact({ ...formDataContact, message: e.target.value })}
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors resize-none"
+                        required
+                      ></textarea>
+                    </div>
+
+                    {contactError && <p className="text-red-600 text-sm">{contactError}</p>}
+
+                    <button
+                      type="submit"
+                      disabled={contactSubmitting}
+                      className="w-full btn-primary py-3 text-lg disabled:opacity-60"
+                    >
+                      {contactSubmitting ? 'Sending...' : 'Send Message'}
+                      <Send className="h-5 w-5" />
+                    </button>
+                  </form>
+                ) : (
+                  <div className="text-center">
+                    <p className="font-semibold mb-2">Thanks! Your message was sent.</p>
+                    <p className="text-sm text-neutral-600">We’ll reply shortly.</p>
                   </div>
-                  <div>
-                    <input
-                      type="email"
-                      placeholder="Your Email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="tel"
-                      placeholder="Your Phone"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <textarea
-                      placeholder="Your Message"
-                      rows={5}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors resize-none"
-                      required
-                    ></textarea>
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full btn-primary py-3 text-lg"
-                  >
-                    Send Message
-                    <Send className="h-5 w-5" />
-                  </button>
-                </form>
+                )}
               </div>
             </AnimatedSection>
           </div>
@@ -761,7 +809,7 @@ export default function Home() {
 
           <AnimatedSection animation="slide-up" delay={200}>
             <div className="flex flex-wrap justify-center gap-4">
-              {popularSearches.map((search, index) => (
+              {popularSearches.map((search) => (
                 <Link
                   key={search.title}
                   to={search.link}
@@ -780,7 +828,7 @@ export default function Home() {
       <section className="py-20 bg-gradient-to-r from-primary to-red-500 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection animation="slide-up">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
               Ready to Transform Your Business?
             </h2>
             <p className="text-lg md:text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
@@ -802,7 +850,7 @@ export default function Home() {
 
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/916304685185?text=Hi%20MAS7i%2C%20I%27m%20interested%20in%20your%20services"
+        href="https://wa.me/919121861192?text=Hi%20MAS7i%2C%20I%27m%20interested%20in%20your%20services"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center text-white shadow-lg animate-pulse hover:animate-none transition-all duration-300 transform hover:scale-110"
