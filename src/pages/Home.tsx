@@ -1,10 +1,13 @@
 // src/pages/home.tsx
 import React, { useState } from 'react';
-import { CheckCircle2, ArrowRight, Target, Layers, Globe2, Quote, Star, Users, Award, TrendingUp, Phone, Mail, MapPin, Send, Plus, Minus, ExternalLink } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Target, Layers, Globe2, Quote, Star, Users, Home as HomeIcon, Award, TrendingUp, Phone, Mail, MapPin, Send, Plus, Minus, ExternalLink } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { TypeWriter } from '../components/TypeWriter';
 import { AnimatedSection } from '../components/AnimatedSection';
+import Process from '@/components/Process';
+import WhyPartner from '@/components/WhyPartner';
+import MarqueeStrip from '@/components/MarqueeStrip';
 
 import heroBusiness from '../assets/hero-business.jpg';
 import recruitmentService from '../assets/recruitment-service.jpg';
@@ -53,7 +56,16 @@ const services = [
     description: "Tailored, user-friendly websites built with cutting-edge technology to match your business goals and drive results.",
     image: webDevService,
     link: "/services/web-development"
-  }
+  },
+  {
+      icon: HomeIcon,
+      title: 'Home Loans',
+      tagline: 'Smart Financing for Your Dream Home',
+      description: 'Assistance for home loans up to 1 crore in Hyderabad with guided documentation and support.',
+      features: ['Loan Advisory', 'Documentation Support', 'Bank Coordination', 'Fast Processing'],
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600',
+      link: '/services/home-loans'
+    },
 ];
 
 const stats = [
@@ -458,24 +470,42 @@ export default function Home() {
         </div>
       </section>
 
+
       {/* Stats Counter */}
-      <section className="bg-primary py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <AnimatedSection key={stat.label} animation="scale" delay={index * 100}>
-                <div className="text-center text-white">
-                  <div className="text-3xl md:text-4xl font-bold mb-2">{stat.number}</div>
-                  <div className="text-primary-foreground/80 font-medium">{stat.label}</div>
-                </div>
-              </AnimatedSection>
-            ))}
+      
+<section
+  className="relative bg-primary py-16 bg-fixed bg-cover bg-center"
+  style={{ backgroundImage: `url(${recruitmentService})` }}
+>
+  {/* Overlay */}
+  <div className="absolute inset-0 bg-black/50"></div>
+
+  <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      {stats.map((stat, index) => (
+        <AnimatedSection
+          key={stat.label}
+          animation="scale"
+          delay={index * 120}
+        >
+          <div className="text-center text-white">
+            <div className="text-3xl md:text-5xl font-bold mb-2">
+              {stat.number}
+            </div>
+            <div className="text-white/80 font-medium text-lg">
+              {stat.label}
+            </div>
           </div>
-        </div>
-      </section>
+        </AnimatedSection>
+      ))}
+    </div>
+  </div>
+</section>
+
 
       {/* Our Process */}
-      <section className="py-20 bg-white">
+       <Process />
+      {/* <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <AnimatedSection animation="slide-up">
@@ -502,9 +532,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Who We Are */}
+      
       <section className="py-20 bg-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -552,7 +583,9 @@ export default function Home() {
       </section>
 
       {/* Why Partner With Us + Marquee */}
-      <section className="py-20 bg-white">
+      <WhyPartner />
+        <MarqueeStrip />
+      {/* <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <AnimatedSection animation="slide-up">
@@ -596,7 +629,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Testimonials */}
       {/* <section className="py-20 bg-neutral-50">

@@ -3,6 +3,9 @@ import { CheckCircle2, Users, Award, Globe2, Target, Layers, TrendingUp, Calenda
 import { Link } from 'react-router-dom';
 import { AnimatedSection } from '../components/AnimatedSection';
 import { TypeWriter } from '../components/TypeWriter';
+import heroBg from "/images/about-hero.jpg"; 
+import { motion } from 'framer-motion';
+import TeamSection from '@/components/TeamSection';
 
 const values = [
   {
@@ -82,31 +85,58 @@ export default function About() {
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-hero text-white">
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <AnimatedSection animation="slide-up">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm px-4 py-2 text-sm font-medium mb-6">
-                <CheckCircle2 className="h-4 w-4 text-primary-light" />
-                <span>Since 2025</span>
-              </div>
-            </AnimatedSection>
-            <AnimatedSection animation="slide-up" delay={200}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                About{' '}
-                <span className="text-primary-light">
-                  <TypeWriter texts={['MAS7i', 'Our Story', 'Our Mission', 'Our Vision']} />
-                </span>
-              </h1>
-            </AnimatedSection>
-            <AnimatedSection animation="slide-up" delay={400}>
-              <p className="text-lg md:text-xl text-neutral-200 max-w-3xl mx-auto leading-relaxed">
-                We're on a mission to simplify operations and accelerate growth through integrated recruitment, travel, marketing, branding, and web solutions that drive real results.
-              </p>
-            </AnimatedSection>
-          </div>
-        </div>
-      </section>
+
+<section className="relative h-[50vh] md:h-[50vh] flex items-center justify-center overflow-hidden">
+  
+  {/* Background Image with Parallax */}
+  <motion.div 
+    className="absolute inset-0 bg-cover bg-center"
+    style={{ backgroundImage: `url(${heroBg})` }}
+    initial={{ scale: 1.2 }}
+    whileInView={{ scale: 1 }}
+    viewport={{ once: true }}
+    transition={{ duration: 2, ease: "easeOut" }}
+  />
+
+  {/* Dark Gradient Overlay */}
+  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
+
+  {/* Optional spotlight glow */}
+  <motion.div
+    className="absolute top-0 left-0 w-[500px] h-[500px] bg-red-700/10 rounded-full blur-[150px]"
+    animate={{ opacity: [0.3, 0.5, 0.3], scale: [1, 1.1, 1] }}
+    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+  />
+
+  {/* Content */}
+  <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+    
+    <AnimatedSection animation="slide-up">
+      <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm px-4 py-2 text-sm font-medium mb-6">
+        <CheckCircle2 className="h-4 w-4 text-primary-light" />
+        <span>Since 2025</span>
+      </div>
+    </AnimatedSection>
+
+    <AnimatedSection animation="slide-up" delay={200}>
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+        About{" "}
+        <span className="text-primary-light">
+          <TypeWriter texts={["MAS7i", "Our Story", "Our Mission", "Our Vision"]} />
+        </span>
+      </h1>
+    </AnimatedSection>
+
+    <AnimatedSection animation="slide-up" delay={400}>
+      <p className="text-lg md:text-xl text-neutral-200 max-w-3xl mx-auto leading-relaxed">
+        We're on a mission to simplify operations and accelerate growth through integrated
+        recruitment, travel, marketing, branding, and web solutions that drive real results.
+      </p>
+    </AnimatedSection>
+
+  </div>
+</section>
+
 
       {/* Stats Section */}
       <section className="py-16 bg-white">
@@ -127,8 +157,11 @@ export default function About() {
         </div>
       </section>
 
+            {/* Team Section */}
+      <TeamSection />
+
       {/* CEO Section */}
-      <section className="py-20 bg-white">
+      {/* <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="flex justify-start md:justify-start">
@@ -152,9 +185,9 @@ export default function About() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
       {/* HR & Marketing head Section */}
-      <section className="py-20 bg-white">
+      {/* <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
@@ -184,7 +217,7 @@ export default function About() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
 
       {/* Our Story */}
