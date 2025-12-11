@@ -91,6 +91,9 @@ export function Layout({ children }: LayoutProps) {
                         <Link to="/services/web-development" className="flex items-center px-4 py-2 text-sm text-neutral-600 hover:text-primary hover:bg-neutral-50">
                           Web Development
                         </Link>
+                        <Link to="/services/home-loans" className="flex items-center px-4 py-2 text-sm text-neutral-600 hover:text-primary hover:bg-neutral-50">
+                          Home Loans
+                        </Link>
                       </div>
                     </div>
                   )}

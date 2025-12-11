@@ -13,6 +13,7 @@ import TravelService from "./pages/services/TravelService";
 import MarketingService from "./pages/services/MarketingService";
 import BrandingService from "./pages/services/BrandingService";
 import WebDevelopmentService from "./pages/services/WebDevelopmentService";
+import HomeLoansPage from "./pages/services/HomeLoansPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/services/marketing" element={<MarketingService />} />
             <Route path="/services/branding" element={<BrandingService />} />
             <Route path="/services/web-development" element={<WebDevelopmentService />} />
+             <Route path="/services/home-loans" element={<HomeLoansPage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

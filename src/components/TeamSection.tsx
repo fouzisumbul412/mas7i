@@ -23,23 +23,23 @@ const leaders: TeamMember[] = [
     name: 'Shehnaaz Nur',
     role: 'Operation Head',
     department: 'Operations & HR',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600',
+    image: '/images/shehnaaz-nur.png',
     isLead: true,
     description: 'Shehnaaz Nur is a seasoned HR professional with strong expertise in talent acquisition, HR operations, and strategic workforce planning. Over the years, she has successfully managed recruitment across IT and Non-IT sectors, collaborating with international clients and delivering tailored workforce solutions.',
     expertise: 'Her leadership style emphasizes transparency, efficiency, and employee engagement. At Hyderabad, she oversees HR functions with a mission to connect the right talent with the right opportunities, strengthen employee relations, and streamline HR processes for sustainable growth.',
     skills: ['Talent Acquisition', 'HR Operations', 'Workforce Planning', 'Employee Relations'],
-    social: { linkedin: '#', email: 'hr@mas7i.com' },
+    social: { linkedin: 'https://ae.linkedin.com/in/shehnaaznur', email: 'hr@mas7i.com' },
   },
   {
     name: 'Asim Abdul',
     role: 'HR & Marketing Head',
     department: 'HR & Technology',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600',
+    image: '/images/asim.png',
     isLead: true,
     description: 'Abdul is a versatile professional with a strong technical skill set and extensive experience in both IT and human resources domains. He is proficient in SAP Basis, Oracle, and SQL databases, demonstrating solid expertise in database management and enterprise resource planning systems.',
     expertise: 'Alongside his IT skills, Abdul has significant experience with HR policies and recruitment, handling both domestic and international hiring processes. Uniquely, Abdul is also adept in electric vehicle design, including battery assembling, showcasing his innovative capabilities.',
     skills: ['SAP Basis', 'Oracle/SQL', 'Power BI', 'Python', 'HR Management', 'EV Design'],
-    social: { linkedin: '#', email: 'hr@mas7i.com', twitter: '#' },
+    social: {  email: 'hr@mas7i.com' },
   },
 ];
 
@@ -105,7 +105,7 @@ const TeamSection = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-24 bg-black relative overflow-hidden">
+    <section className=" bg-black/80 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920')] bg-cover bg-center bg-fixed opacity-5" />
       <motion.div
@@ -119,9 +119,9 @@ const TeamSection = () => {
         transition={{ duration: 10, repeat: Infinity }}
       />
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-30 pt-12 pb-12">
         {/* Section Header */}
-        <div className="text-center mb-16" data-aos="fade-up">
+        <div className="text-center mb-0 z-50" data-aos="fade-up">
           <motion.div
             initial={{ scale: 0 }}
             whileInView={{ scale: 1 }}
@@ -130,7 +130,7 @@ const TeamSection = () => {
             <Star className="w-4 h-4 text-red-600" />
             <span className="text-red-600 font-semibold text-sm">The People Behind MAS7i</span>
           </motion.div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mt-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mt-4" style={{ textShadow: '0 6px 18px rgba(0,0,0,0.6)' }}>
             Meet Our <span className="text-red-600">Team</span>
           </h2>
           <p className="text-white mt-4  max-w-2xl mx-auto">
@@ -213,15 +213,15 @@ const TeamSection = () => {
 
             {/* TEXT SIDE */}
             <div className="p-8 flex flex-col justify-center h-full">
-              <span className="text-red-500 text-sm font-medium mb-1">
+              <span className="text-red-600 text-sm font-semibold mb-1">
                 {leader.department}
               </span>
 
-              <h3 className="text-2xl font-bold text-white leading-tight mb-1">
+              <h3 className="text-3xl font-extrabold text-white leading-tight mb-1">
                 {leader.name}
               </h3>
 
-              <p className="text-red-500 font-semibold mb-4">
+              <p className="text-red-600 text-xl font-bold mb-4">
                 {leader.role}
               </p>
 
@@ -377,7 +377,7 @@ const TeamSection = () => {
                   <img 
                     src={selectedMember.image}
                     alt={selectedMember.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/50 to-transparent" />
                   
@@ -385,7 +385,7 @@ const TeamSection = () => {
                   <motion.button
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     onClick={() => setSelectedMember(null)}
-                    className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-primary transition-colors"
+                    className="absolute top-4 right-4 w-10 h-10 bg-black/10 backdrop-blur-sm rounded-full flex items-center justify-center text-red-600 hover:bg-primary transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </motion.button>
